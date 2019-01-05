@@ -7,7 +7,7 @@ FROM java:8-alpine
 #-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
 #-agentpath:/usr/local/jprofiler8/bin/linux-x64/libjprofilerti.so=nowait
 ENV JPAGENT_PATH=""
-#ENV JPAGENT_PATH="$JPAGENT_PATH -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
+ENV JPAGENT_PATH="$JPAGENT_PATH -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
 
 #EXPOSE 8849
 

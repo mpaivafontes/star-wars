@@ -2,7 +2,7 @@ TAG?=latest
 MESSAGE?=GIT commit mensagem automatica
 BRANCH?=develop
 
-IMAGE=startwars_app
+IMAGE=starwars_app
 
 commit: git-add git-commit git-push
 

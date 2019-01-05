@@ -25,7 +25,7 @@ import static com.labs.starwars.infrastructure.factories.response.ResponseFactor
  * @author - marcelo.fontes
  * @since - 1/4/19
  **/
-@Slf4j(topic = "com.labs.Input")
+@Slf4j
 @RestController
 @AllArgsConstructor
 public class PlanetController {
@@ -96,6 +96,21 @@ public class PlanetController {
         } catch (final Exception ex) {
             log.error(marker.and(time(watch)), "Search finished with error. id[{}]", id, ex);
 
+            return internalError(ex);
+        }
+    }
+
+    @GetMapping(value = "v1")
+    public ResponseEntity<Response> findAll() {
+        final StopWatch watch = new StopWatch();
+
+        try {
+            watch.start("responseTime");
+            final List<Planet> planets = service.findAll();
+            watch.stop();
+
+            return success(planets);
+        } catch (final Exception ex) {
             return internalError(ex);
         }
     }
