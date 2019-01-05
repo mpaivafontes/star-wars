@@ -1,0 +1,14 @@
+version: '3'
+services:
+  app:
+    container_name: star_wars_app
+    build: .
+    network_mode: host
+    volumes:
+      - /tmp/star-wars:/tmp/star-wars
+    environment:
+      SPRING_PROFILES_ACTIVE: homolog
+      LOGGING_PATH: /tmp/star-wars
+  db:
+    image: mongo
+    network_mode: host
