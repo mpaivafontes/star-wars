@@ -5,5 +5,5 @@ package com.labs.starwars.domain.models.internal;
  * @since - 1/4/19
  **/
 public enum Event {
-    save, delete, list
+    save, delete, list_by_id, list_by_name
 }

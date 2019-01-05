@@ -1,7 +1,7 @@
 package com.labs.starwars.domain.services;
 
 import com.labs.starwars.domain.models.internal.Request;
-import com.labs.starwars.domain.routers.Planet;
+import com.labs.starwars.domain.models.internal.entity.Planet;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface PlanetsService {
 
     void delete(String name);
 
-    List<Planet> findById(String id);
+    Planet findById(String id);
 
     List<Planet> findByName(String name);
 }

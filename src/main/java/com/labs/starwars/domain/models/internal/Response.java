@@ -1,6 +1,7 @@
 package com.labs.starwars.domain.models.internal;
 
-import com.labs.starwars.domain.routers.Planet;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.labs.starwars.domain.models.internal.entity.Planet;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,9 +15,11 @@ import java.util.Map;
  **/
 @Data
 @Builder
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Response implements Serializable {
     String message;
     Map<String, Object> errors;
 
+    Planet planet;
     List<Planet> planets;
 }

@@ -1,4 +1,4 @@
-package com.labs.starwars.domain.routers;
+package com.labs.starwars.domain.models.internal.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

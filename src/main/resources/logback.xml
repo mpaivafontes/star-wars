@@ -105,7 +105,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.b2w.starwars.infrastructure.apis" level="FULL" additivity="false">
+    <logger name="com.labs.starwars.infrastructure.apis" level="FULL" additivity="false">
         <appender-ref ref="integration"/>
     </logger>
 

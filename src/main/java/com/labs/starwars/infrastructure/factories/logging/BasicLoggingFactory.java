@@ -22,12 +22,12 @@ public final class BasicLoggingFactory {
         return append("name", name);
     }
 
+    public static LogstashMarker event(final Event event) {
+        return append("event", event);
+    }
+
     public static LogstashMarker time(final StopWatch watch) {
         if (watch.isRunning()) watch.stop();
         return appendEntries(of(watch.getTaskInfo()).collect(toMap(StopWatch.TaskInfo::getTaskName, StopWatch.TaskInfo::getTimeMillis)));
-    }
-
-    public static LogstashMarker event(final Event event) {
-        return append("event", event);
     }
 }
