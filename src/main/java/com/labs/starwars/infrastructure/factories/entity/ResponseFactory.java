@@ -18,9 +18,8 @@ import static org.springframework.http.HttpStatus.*;
  * @since - 1/5/19
  **/
 public final class ResponseFactory {
-
     public static ResponseEntity<Response> ok(final List<Planet> planets) {
-        return response(OK);
+        return response(OK, planets);
     }
 
     public static ResponseEntity<Response> created() {
@@ -33,27 +32,32 @@ public final class ResponseFactory {
     }
 
     private static ResponseEntity<Response> badRequest(final String customMessage, final Map<String, Object> errors) {
-        return response(BAD_REQUEST, customMessage, errors);
+        return response(BAD_REQUEST, null, customMessage, errors);
     }
 
     public static ResponseEntity<Response> internalError(final Exception ex) {
-        return response(INTERNAL_SERVER_ERROR, ex.getMessage());
+        return response(INTERNAL_SERVER_ERROR, null, ex.getMessage());
     }
 
     private static ResponseEntity<Response> response(final HttpStatus status) {
-        return response(status, null);
+        return response(status, null, null);
     }
 
-    private static ResponseEntity<Response> response(final HttpStatus status, final String errorMessage) {
-        return response(status, errorMessage, null);
+    private static ResponseEntity<Response> response(final HttpStatus status, final List<Planet> planets) {
+        return response(status, planets, null);
     }
 
-    private static ResponseEntity<Response> response(final HttpStatus status, final String message, final Map<String, Object> errors) {
-        return ResponseEntity.status(status).body(responseBody(message, errors));
+    private static ResponseEntity<Response> response(final HttpStatus status, final List<Planet> planets, final String message) {
+        return response(status, planets, message, null);
     }
 
-    private static Response responseBody(final String message, final Map<String, Object> errors) {
+    private static ResponseEntity<Response> response(final HttpStatus status, final List<Planet> planets, final String message, final Map<String, Object> errors) {
+        return ResponseEntity.status(status).body(responseBody(message, planets, errors));
+    }
+
+    private static Response responseBody(final String message, final List<Planet> planets, final Map<String, Object> errors) {
         return Response.builder()
+                .planets(planets)
                 .message(message).errors(errors)
                 .build();
     }

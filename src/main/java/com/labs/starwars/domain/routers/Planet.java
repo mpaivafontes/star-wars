@@ -16,7 +16,7 @@ public class Planet {
 
     String name;
     String climate;
-    String ground;
+    String terrain;
 
     List<String> films;
 }

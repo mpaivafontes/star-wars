@@ -1,6 +1,12 @@
 package com.labs.starwars;
 
 import com.labs.starwars.domain.models.internal.Request;
+import com.labs.starwars.domain.routers.Planet;
+
+import java.util.List;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 /**
  * @author - marcelo.fontes
@@ -19,6 +25,25 @@ public final class TestFactory {
             req.setTerrain("terrain");
         }
         return req;
+    }
+
+    ///////////////////////////////////
+
+    public static List<Planet> planets() {
+        return planets(false);
+    }
+
+    public static List<Planet> planets(boolean isEmpty) {
+        return isEmpty ? singletonList(planet()) : emptyList();
+    }
+
+    private static Planet planet() {
+        final Planet planet = new Planet();
+        planet.setName("name");
+        planet.setClimate("climate");
+        planet.setTerrain("terrain");
+        planet.setFilms(singletonList("film"));
+        return planet;
     }
 
     ///////////////////////////////////
