@@ -10,6 +10,6 @@ import java.util.List;
  * @since - 1/4/19
  **/
 @Data
-public class PlanetResponse implements Serializable {
-    List<String> films;
+public class StarWarsResponse implements Serializable {
+    List<Film> results;
 }

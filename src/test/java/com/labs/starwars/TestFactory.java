@@ -1,5 +1,7 @@
 package com.labs.starwars;
 
+import com.labs.starwars.domain.models.external.Film;
+import com.labs.starwars.domain.models.external.StarWarsResponse;
 import com.labs.starwars.domain.models.internal.Request;
 import com.labs.starwars.domain.models.internal.entity.Planet;
 
@@ -34,18 +36,44 @@ public final class TestFactory {
     }
 
     public static List<Planet> planets(boolean isEmpty) {
-        return !isEmpty ? singletonList(planet()) : emptyList();
+        return singletonList(planet(isEmpty));
     }
 
     public static Planet planet() {
+        return planet(false);
+    }
+
+    public static Planet planet(boolean isEmpty) {
         final Planet planet = new Planet();
         planet.setId("id");
         planet.setName("name");
         planet.setClimate("climate");
         planet.setTerrain("terrain");
-        planet.setFilms(singletonList("film"));
+        planet.setFilms(isEmpty ? emptyList() : singletonList("film"));
         return planet;
     }
+
+    ///////////////////////////////////
+
+    public static StarWarsResponse starWars() {
+        return starWars(false);
+    }
+
+    public static StarWarsResponse starWars(boolean isEmpty) {
+        final StarWarsResponse res = new StarWarsResponse();
+        res.setResults(film(isEmpty));
+        return res;
+    }
+
+    private static List<Film> film(boolean isEmpty) {
+        if (isEmpty) {
+            return emptyList();
+        }
+        final Film film = new Film();
+        film.setFilms(singletonList("film"));
+        return singletonList(film);
+    }
+
 
     ///////////////////////////////////
 

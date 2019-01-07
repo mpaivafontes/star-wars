@@ -4,8 +4,6 @@ import com.labs.starwars.domain.models.internal.Request;
 import com.labs.starwars.domain.models.internal.Response;
 import com.labs.starwars.domain.models.internal.entity.Planet;
 import com.labs.starwars.domain.services.PlanetsService;
-import com.labs.starwars.infrastructure.factories.logging.RequestLoggingFactory;
-import com.labs.starwars.infrastructure.factories.response.ResponseFactory;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.marker.LogstashMarker;
@@ -19,6 +17,8 @@ import java.util.List;
 
 import static com.labs.starwars.domain.models.internal.Event.*;
 import static com.labs.starwars.infrastructure.factories.logging.BasicLoggingFactory.*;
+import static com.labs.starwars.infrastructure.factories.logging.ErrorLoggingFactory.error;
+import static com.labs.starwars.infrastructure.factories.logging.RequestLoggingFactory.request;
 import static com.labs.starwars.infrastructure.factories.response.ResponseFactory.*;
 
 /**
@@ -35,7 +35,7 @@ public class PlanetController {
     public ResponseEntity<Response> save(@RequestBody @Valid final Request request, final Errors errors) {
         final StopWatch watch = new StopWatch();
 
-        final LogstashMarker marker = RequestLoggingFactory.request(request).and(event(save));
+        final LogstashMarker marker = request(request).and(event(save));
 
         try {
             if (errors.hasErrors()) {
@@ -45,35 +45,37 @@ public class PlanetController {
             }
 
             watch.start("responseTime");
-            service.save(request);
+            final Planet planet = service.save(request);
             watch.stop();
 
             log.info(marker.and(time(watch)), "Request has been processed.");
 
-            return created();
+            return created(planet);
         } catch (final Exception ex) {
-            log.error(marker.and(time(watch)), "Error to process request.", ex);
+            log.error(marker.and(time(watch)).and(error(ex)),
+                    "Error to process request.", ex);
 
             return internalError(ex);
         }
     }
 
-    @DeleteMapping("v1/planets/{name}")
-    public ResponseEntity<Response> delete(@PathVariable("name") final String name) {
+    @DeleteMapping("v1/planets/{id}")
+    public ResponseEntity<Response> delete(@PathVariable("id") final String id) {
         final StopWatch watch = new StopWatch();
 
-        final LogstashMarker marker = name(name).and(event(delete));
+        final LogstashMarker marker = id(id).and(event(delete));
 
         try {
             watch.start("responseTime");
-            service.delete(name);
+            service.delete(id);
             watch.stop();
 
             log.info(marker.and(time(watch)), "Request has been processed.");
 
-            return ResponseFactory.created();
+            return noContent();
         } catch (final Exception ex) {
-            log.error(marker.and(time(watch)), "Error to process request.", ex);
+            log.error(marker.and(time(watch)).and(error(ex)),
+                    "Error to process request.", ex);
 
             return internalError(ex);
         }
@@ -94,23 +96,9 @@ public class PlanetController {
 
             return success(planet);
         } catch (final Exception ex) {
-            log.error(marker.and(time(watch)), "Search finished with error. id[{}]", id, ex);
+            log.error(marker.and(time(watch)).and(error(ex)),
+                    "Search finished with error. id[{}]", id, ex);
 
-            return internalError(ex);
-        }
-    }
-
-    @GetMapping(value = "v1")
-    public ResponseEntity<Response> findAll() {
-        final StopWatch watch = new StopWatch();
-
-        try {
-            watch.start("responseTime");
-            final List<Planet> planets = service.findAll();
-            watch.stop();
-
-            return success(planets);
-        } catch (final Exception ex) {
             return internalError(ex);
         }
     }
@@ -130,7 +118,8 @@ public class PlanetController {
 
             return success(planets);
         } catch (final Exception ex) {
-            log.error(marker.and(time(watch)), "Search finished with error. name[{}]", name, ex);
+            log.error(marker.and(time(watch)).and(error(ex)),
+                    "Search finished with error. name[{}]", name, ex);
 
             return internalError(ex);
         }

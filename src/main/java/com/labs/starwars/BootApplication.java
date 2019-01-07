@@ -1,6 +1,6 @@
 package com.labs.starwars;
 
-import com.labs.starwars.domain.models.internal.entity.Planet;
+import com.labs.starwars.infrastructure.apis.StarWarsAPI;
 import com.labs.starwars.infrastructure.repositories.PlanetRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,15 +19,8 @@ public class BootApplication {
 
     @Bean
     @Profile("!it")
-    public ApplicationRunner runner(final PlanetRepository repository) {
-        return args -> {
-            final Planet planet = new Planet();
-            planet.setName("Terra");
-            planet.setClimate("Calor");
-            planet.setTerrain("Plano");
-
-            repository.save(planet);
-        };
+    public ApplicationRunner runner(final PlanetRepository repository, final StarWarsAPI force) {
+        return args -> force.search("Tatooine");
     }
 }
 

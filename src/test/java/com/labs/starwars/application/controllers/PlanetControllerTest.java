@@ -49,6 +49,8 @@ public class PlanetControllerTest {
 
     @Test
     public void save_success() throws Exception {
+        doReturn(planet()).when(service).save(any(Request.class));
+
         final Request req = req();
 
         final MockHttpServletRequestBuilder request = post("/v1/planets")
@@ -57,7 +59,11 @@ public class PlanetControllerTest {
 
         mvc.perform(request)
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.planet.name", is(req.getName())))
+                .andExpect(jsonPath("$.planet.climate", is(req.getClimate())))
+                .andExpect(jsonPath("$.planet.terrain", is(req.getTerrain())))
+        ;
 
         verify(service).save(eq(req));
         verifyNoMoreInteractions(service);
@@ -101,14 +107,14 @@ public class PlanetControllerTest {
 
     @Test
     public void delete_success() throws Exception {
-        final MockHttpServletRequestBuilder request = delete("/v1/planets/{name}", "planet")
+        final MockHttpServletRequestBuilder request = delete("/v1/planets/{id}", "id")
                 .contentType(APPLICATION_JSON);
 
         mvc.perform(request)
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isNoContent());
 
-        verify(service).delete(eq("planet"));
+        verify(service).delete(eq("id"));
         verifyNoMoreInteractions(service);
     }
 
@@ -116,7 +122,7 @@ public class PlanetControllerTest {
     public void delete_internal_error() throws Exception {
         doThrow(exception()).when(service).delete(anyString());
 
-        final MockHttpServletRequestBuilder request = delete("/v1/planets/{name}", "planet")
+        final MockHttpServletRequestBuilder request = delete("/v1/planets/{id}", "id")
                 .contentType(APPLICATION_JSON);
 
         mvc.perform(request)
@@ -130,7 +136,7 @@ public class PlanetControllerTest {
 
     @Test
     public void search_findById_success() throws Exception {
-        doReturn(planet()).when(service).findById(anyString());
+        doReturn(planet(false)).when(service).findById(anyString());
 
         final MockHttpServletRequestBuilder request = get("/v1/planets/{id}", "id")
                 .contentType(APPLICATION_JSON);

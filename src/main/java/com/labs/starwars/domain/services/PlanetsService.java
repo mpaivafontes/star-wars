@@ -10,13 +10,11 @@ import java.util.List;
  * @since - 1/4/19
  **/
 public interface PlanetsService {
-    void save(Request request);
+    Planet save(Request request);
 
-    void delete(String name);
+    void delete(String id);
 
     Planet findById(String id);
-
-    List<Planet> findAll();
 
     List<Planet> findByName(String name);
 }

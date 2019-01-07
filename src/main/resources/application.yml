@@ -1,0 +1,8 @@
+feign:
+  httpclient:
+    max-connections: 50
+    max-connections-per-route: 20
+  client.config.default:
+    connectTimeout: 5000
+    readTimeout: 10000
+    loggerLevel: FULL

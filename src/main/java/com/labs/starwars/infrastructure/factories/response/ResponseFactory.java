@@ -32,8 +32,12 @@ public final class ResponseFactory {
 
     //////////////////////////////
 
-    public static ResponseEntity<Response> created() {
-        return response(CREATED, null);
+    public static ResponseEntity<Response> created(final Planet planet) {
+        return status(CREATED).body(body(planet));
+    }
+
+    public static ResponseEntity<Response> noContent() {
+        return status(NO_CONTENT).body(null);
     }
 
     //////////////////////////////

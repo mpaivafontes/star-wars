@@ -1,6 +1,7 @@
 package com.labs.starwars.domain.models.internal.entity;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 
 import java.util.List;
@@ -14,8 +15,11 @@ public class Planet {
     @Id
     String id;
 
+    @NotEmpty
     String name;
+    @NotEmpty
     String climate;
+    @NotEmpty
     String terrain;
 
     List<String> films;
